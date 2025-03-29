@@ -31,7 +31,7 @@ Si usas PowerShell (en Windows, vscode):
 .\venv_windows\Scripts\Activate.ps1
 ```
 ![alt text](image.png)
-se debería ver en verde venv_windows
+Puedes revisar que esta activado en ambiente si se ve en verde (venv_windows)
 
 4. Instalar las dependencias necesarias
 Ahora que el entorno está activado, el siguiente paso es instalar todas las librerías que el proyecto necesita para funcionar.
