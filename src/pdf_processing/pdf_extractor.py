@@ -17,7 +17,7 @@ def extract_text_from_pdf(pdf_path):
         print(f"Error extracting text from {pdf_path}: {e}")
     
     return text
-
+ 
 def extract_from_all_pdfs_in_folder(folder_path):
     """
     Extracts text from all PDF files in a given folder.
