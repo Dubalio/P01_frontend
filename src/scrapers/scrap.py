@@ -41,7 +41,7 @@ def save_pdf_links_to_json(pdf_links):
     print(f"Los enlaces se han guardado en {file_name}")
 
 # URL de la página web desde donde extraer los enlaces
-url = "https://www.diariooficial.interior.gob.cl/edicionelectronica/"  # Cambia esta URL por la correcta
+url = "https://www.diariooficial.interior.gob.cl/edicionelectronica/empresas_cooperativas.php?date=31-03-2025&edition=44113"  
 
 # Obtener los enlaces de los PDFs
 pdf_links = get_pdf_links(url)
