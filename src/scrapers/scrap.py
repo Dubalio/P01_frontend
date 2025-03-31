@@ -3,30 +3,53 @@ from bs4 import BeautifulSoup
 import json
 from datetime import datetime
 
-# URL de la página web donde están los enlaces a los PDFs
-URL = "https://www.diariooficial.cl/publicaciones"
+# Función para obtener la fecha actual
+def get_current_date():
+    return datetime.now().strftime('%d-%m-%Y')
 
-# Obtener la fecha actual
-fecha_hoy = datetime.now().strftime("%d-%m-%Y")
+# Función para extraer los enlaces de los PDFs
+def get_pdf_links(url):
+    try:
+        # Hacer la solicitud HTTP a la página web
+        response = requests.get(url)
+        response.raise_for_status()  # Lanza un error si la respuesta no es 200 (OK)
+    except requests.RequestException as e:
+        print(f"Error al acceder a la página: {e}")
+        return []
+    
+    # Parsear la página con BeautifulSoup
+    soup = BeautifulSoup(response.text, 'html.parser')
+    
+    # Buscar todos los enlaces de tipo PDF
+    pdf_links = []
+    for a_tag in soup.find_all('a', href=True):
+        if a_tag['href'].endswith('.pdf'):
+            pdf_links.append(a_tag['href'])
+    
+    return pdf_links
 
-# Realizar la petición HTTP a la página
-response = requests.get(URL)
-if response.status_code != 200:
-    print("Error al acceder a la página.")
-    exit()
+# Función para guardar los enlaces en un archivo JSON
+def save_pdf_links_to_json(pdf_links):
+    # Obtener la fecha actual
+    date = get_current_date()
+    
+    # Guardar los enlaces en un archivo JSON
+    file_name = f"pdf_links_{date}.json"
+    with open(file_name, 'w') as json_file:
+        json.dump(pdf_links, json_file, indent=4)
+    
+    print(f"Los enlaces se han guardado en {file_name}")
 
-# Parsear el contenido HTML
-soup = BeautifulSoup(response.text, "html.parser")
+# URL de la página web desde donde extraer los enlaces
+url = "https://www.diariooficial.interior.gob.cl/edicionelectronica/"  # Cambia esta URL por la correcta
 
-# Encontrar los enlaces a los archivos PDF
-pdf_links = []
-for link in soup.find_all("a", href=True):
-    if link["href"].endswith(".pdf"):
-        pdf_links.append(link["href"])
+# Obtener los enlaces de los PDFs
+pdf_links = get_pdf_links(url)
 
-# Guardar los enlaces en un archivo JSON
-filename = f"pdf_links_{fecha_hoy}.json"
-with open(filename, "w", encoding="utf-8") as f:
-    json.dump(pdf_links, f, indent=4)
+# Guardar los enlaces en el archivo JSON si se han encontrado enlaces
+if pdf_links:
+    save_pdf_links_to_json(pdf_links)
+else:
+    print("No se encontraron enlaces de PDF.")
 
-print(f"Enlaces guardados en {filename}")
+###
