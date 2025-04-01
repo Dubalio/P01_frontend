@@ -30,13 +30,16 @@ def get_pdf_links(url):
 
 # Función para guardar los enlaces en un archivo JSON
 def save_pdf_links_to_json(pdf_links):
+    # Excluir el primer y el último enlace
+    filtered_links = pdf_links[1:-1]  # Excluye el primer y último elemento de la lista
+    
     # Obtener la fecha actual
     date = get_current_date()
     
     # Guardar los enlaces en un archivo JSON
     file_name = f"pdf_links_{date}.json"
     with open(file_name, 'w') as json_file:
-        json.dump(pdf_links, json_file, indent=4)
+        json.dump(filtered_links, json_file, indent=4)
     
     print(f"Los enlaces se han guardado en {file_name}")
 
@@ -51,5 +54,3 @@ if pdf_links:
     save_pdf_links_to_json(pdf_links)
 else:
     print("No se encontraron enlaces de PDF.")
-
-###
