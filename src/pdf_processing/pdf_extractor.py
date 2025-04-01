@@ -52,9 +52,9 @@ def extract_company_info(text):
 
 def extract_from_all_pdfs_in_folder(folder_path):
     """
-    Extracts company info from all PDF files in a given folder and saves it to a JSON file.
+    Extracts company info from all PDF files in subfolders of a given folder and saves it to a JSON file.
     If the JSON file already exists, it appends new information for PDFs that haven't been processed yet.
-    :param folder_path: Path to the folder containing PDF files
+    :param folder_path: Path to the folder containing subfolders with PDF files
     :return: A dictionary with file names as keys and extracted info as values
     """
     extracted_info = {}
@@ -69,14 +69,19 @@ def extract_from_all_pdfs_in_folder(folder_path):
         except Exception as e:
             print(f"Error al cargar el archivo JSON existente: {e}")
 
-    # Procesar solo los archivos PDF que no estén en el JSON
-    for filename in os.listdir(folder_path):
-        if filename.endswith(".pdf") and filename not in extracted_info:
-            pdf_path = os.path.join(folder_path, filename)
-            print(f"Processing: {filename}")
-            extracted_text = extract_text_from_pdf(pdf_path)
-            company_info = extract_company_info(extracted_text)
-            extracted_info[filename] = company_info
+    # Recorrer las subcarpetas dentro de la carpeta principal
+    for subfolder in os.listdir(folder_path):
+        subfolder_path = os.path.join(folder_path, subfolder)
+        if os.path.isdir(subfolder_path) and re.match(r"\d{4}-\d{2}-\d{2}", subfolder):  # Verificar formato de fecha
+            print(f"Procesando carpeta: {subfolder}")
+            for filename in os.listdir(subfolder_path):
+                if filename.endswith(".pdf") and filename not in extracted_info:
+                    pdf_path = os.path.join(subfolder_path, filename)
+                    print(f"Processing: {filename}")
+                    extracted_text = extract_text_from_pdf(pdf_path)
+                    company_info = extract_company_info(extracted_text)
+                    company_info["fecha"] = subfolder  # Agregar la fecha correspondiente
+                    extracted_info[filename] = company_info
 
     # Guardar la información actualizada en el archivo JSON
     try:
@@ -97,3 +102,4 @@ if __name__ == "__main__":
         print(f"\n--- Extraido de {filename} ---")
         print(f"Razón Social: {info['razon_social']}")
         print(f"Fundadores: {', '.join(info['fundadores'])}")
+        print(f"Fecha: {info['fecha']}")
