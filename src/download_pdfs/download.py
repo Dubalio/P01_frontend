@@ -3,42 +3,47 @@ import json
 import requests
 from datetime import datetime
 
-# Obtener ruta base del script
+def obtener_fechas():
+    hoy = datetime.now()
+    return hoy.strftime("%d-%m-%Y"), hoy.strftime("%Y-%m-%d")
+
+def preparar_rutas(script_dir, fecha_archivo, fecha_carpeta):
+    ruta_json = os.path.abspath(os.path.join(script_dir, "..", "scrapers", f"pdf_links_{fecha_archivo}.json"))
+    carpeta_destino = os.path.abspath(os.path.join(script_dir, "..", "..", "data", fecha_carpeta))
+    os.makedirs(carpeta_destino, exist_ok=True)
+    return ruta_json, carpeta_destino
+
+
+def mostrar_archivos_en_scrapers(script_dir):
+    scrapers_path = os.path.abspath(os.path.join(script_dir, "..", "scrapers"))
+    print(f"📁 Archivos en scrapers/: {os.listdir(scrapers_path)}")
+
+def descargar_pdfs_desde_json(ruta_json, carpeta_destino):
+    with open(ruta_json, "r", encoding="utf-8") as file:
+        links = json.load(file)
+
+    for i, url in enumerate(links):
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+            nombre_pdf = os.path.join(carpeta_destino, f"archivo_{i+1}.pdf")
+            with open(nombre_pdf, "wb") as f:
+                f.write(response.content)
+            print(f"✅ Descargado: {nombre_pdf}")
+        except Exception as e:
+            print(f"⚠️ Error al descargar {url}: {e}")
+
+
+# --- EJECUCIÓN DIRECTA ---
+
 script_dir = os.path.dirname(os.path.abspath(__file__))
+fecha_archivo, fecha_carpeta = obtener_fechas()
+ruta_json, carpeta_destino = preparar_rutas(script_dir, fecha_archivo, fecha_carpeta)
 
-# Construir la ruta al archivo JSON (está en ../scrapers/)
-fecha_archivo = datetime.now().strftime("%d-%m-%Y")
-nombre_archivo = os.path.join(script_dir, "..", "scrapers", f"pdf_links_{fecha_archivo}.json")
-nombre_archivo = os.path.abspath(nombre_archivo)
+print(f"🔍 Buscando archivo: {ruta_json}")
+mostrar_archivos_en_scrapers(script_dir)
 
-# Crear carpeta de salida en data/YYYY-MM-DD
-fecha_carpeta = datetime.now().strftime("%Y-%m-%d")
-carpeta_destino = os.path.join(script_dir, "..", "..", "data", fecha_carpeta)
-carpeta_destino = os.path.abspath(carpeta_destino)
-os.makedirs(carpeta_destino, exist_ok=True)
-
-# DEBUG: Mostrar ruta y archivos encontrados
-scrapers_path = os.path.abspath(os.path.join(script_dir, "..", "scrapers"))
-print(f"🔍 Buscando archivo: {nombre_archivo}")
-print(f"📁 Archivos en scrapers/: {os.listdir(scrapers_path)}")
-
-# Verificar existencia del archivo
-if not os.path.exists(nombre_archivo):
-    print(f"❌ No se encontró el archivo {nombre_archivo}")
-    exit()
-
-# Leer el JSON
-with open(nombre_archivo, "r", encoding="utf-8") as file:
-    links = json.load(file)
-
-# Descargar PDFs
-for i, url in enumerate(links):
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        nombre_pdf = os.path.join(carpeta_destino, f"archivo_{i+1}.pdf")
-        with open(nombre_pdf, "wb") as f:
-            f.write(response.content)
-        print(f"✅ Descargado: {nombre_pdf}")
-    except Exception as e:
-        print(f"⚠️ Error al descargar {url}: {e}")
+if not os.path.exists(ruta_json):
+    print(f"❌ No se encontró el archivo {ruta_json}")
+else:
+    descargar_pdfs_desde_json(ruta_json, carpeta_destino)
