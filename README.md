@@ -54,3 +54,9 @@ venv_windows/
 __pycache__/
 *.pyc
 ```
+
+
+si utilizan nuevas librerias metanlas al arhivo de requiremnts.txt con el comando:
+```sh
+pip freeze > requirements.txt
+```
