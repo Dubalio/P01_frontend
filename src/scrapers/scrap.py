@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import json
 from datetime import datetime
+import os
 
 # Función para obtener la fecha actual
 def get_current_date():
@@ -36,15 +37,19 @@ def save_pdf_links_to_json(pdf_links):
     # Obtener la fecha actual
     date = get_current_date()
     
+    # Construir la ruta absoluta para guardar el archivo JSON en la carpeta src
+    script_dir = os.path.dirname(os.path.abspath(__file__))  # Directorio actual del script
+    src_dir = os.path.abspath(os.path.join(script_dir, ".."))  # Subir un nivel para llegar a src
+    file_name = os.path.join(src_dir, f"pdf_links_{date}.json")
+    
     # Guardar los enlaces en un archivo JSON
-    file_name = f"pdf_links_{date}.json"
     with open(file_name, 'w') as json_file:
         json.dump(filtered_links, json_file, indent=4)
     
     print(f"Los enlaces se han guardado en {file_name}")
 
 # URL de la página web desde donde extraer los enlaces
-url = "https://www.diariooficial.interior.gob.cl/edicionelectronica/empresas_cooperativas.php?date={}&edition=44113".format(get_current_date())  
+url = "https://www.diariooficial.interior.gob.cl/edicionelectronica/empresas_cooperativas.php?date={}&edition=44120".format(get_current_date())  
 
 # Obtener los enlaces de los PDFs
 pdf_links = get_pdf_links(url)
