@@ -29,7 +29,7 @@ def main():
 
     # --- PROCESAMIENTO DE PDFs ---
     print("📄 Iniciando procesamiento de PDFs...")
-    data_folder = os.path.abspath(os.path.join(script_dir, "..", "..", "data"))
+    data_folder = os.path.abspath(os.path.join(script_dir, "..", "data"))  # Ajustar la ruta
     extracted_info = extract_from_all_pdfs_in_folder(data_folder)
 
     # Mostrar los datos extraídos

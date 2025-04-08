@@ -48,14 +48,15 @@ def save_pdf_links_to_json(pdf_links):
     
     print(f"Los enlaces se han guardado en {file_name}")
 
-# URL de la página web desde donde extraer los enlaces
-url = "https://www.diariooficial.interior.gob.cl/edicionelectronica/empresas_cooperativas.php?date={}&edition=44120".format(get_current_date())  
-
-# Obtener los enlaces de los PDFs
-pdf_links = get_pdf_links(url)
-
-# Guardar los enlaces en el archivo JSON si se han encontrado enlaces
-if pdf_links:
-    save_pdf_links_to_json(pdf_links)
-else:
-    print("No se encontraron enlaces de PDF.")
+if __name__ == "__main__":
+    # URL de la página web desde donde extraer los enlaces
+    url = "https://www.diariooficial.interior.gob.cl/edicionelectronica/empresas_cooperativas.php?date={}&edition=44120".format(get_current_date())
+    
+    # Obtener los enlaces de los PDFs
+    pdf_links = get_pdf_links(url)
+    
+    # Guardar los enlaces en el archivo JSON si se han encontrado enlaces
+    if pdf_links:
+        save_pdf_links_to_json(pdf_links)
+    else:
+        print("No se encontraron enlaces de PDF.")
