@@ -7,7 +7,7 @@ import os
 def main():
     # --- SCRAPING ---
     print("🔍 Iniciando scraping...")
-    url = "https://www.diariooficial.interior.gob.cl/edicionelectronica/empresas_cooperativas.php?date={}&edition=44125".format(get_current_date())
+    url = "https://www.diariooficial.interior.gob.cl/edicionelectronica/empresas_cooperativas.php?date={}&edition=44126".format(get_current_date())
     pdf_links = get_pdf_links(url)
     print (url)
     if pdf_links:
