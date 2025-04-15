@@ -8,9 +8,16 @@ def obtener_fechas():
     return hoy.strftime("%d-%m-%Y"), hoy.strftime("%Y-%m-%d")
 
 def preparar_rutas(script_dir, fecha_archivo, fecha_carpeta):
-    ruta_json = os.path.abspath(os.path.join(script_dir, "..", "scrapers", f"pdf_links_{fecha_archivo}.json"))
-    carpeta_destino = os.path.abspath(os.path.join(script_dir, "..", "..", "data", fecha_carpeta))
+    # Obtener la ruta absoluta de la carpeta base (P01)
+    base_dir = os.path.abspath(os.path.join(script_dir, ".."))
+    
+    # Construir la ruta del archivo JSON en src/
+    ruta_json = os.path.join(base_dir, "src", f"pdf_links_{fecha_archivo}.json")
+    
+    # Construir la carpeta destino en data/<fecha>
+    carpeta_destino = os.path.join(base_dir, "data", fecha_carpeta)
     os.makedirs(carpeta_destino, exist_ok=True)
+    
     return ruta_json, carpeta_destino
 
 
@@ -34,16 +41,15 @@ def descargar_pdfs_desde_json(ruta_json, carpeta_destino):
             print(f"⚠️ Error al descargar {url}: {e}")
 
 
-# --- EJECUCIÓN DIRECTA ---
+if __name__ == "__main__":
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    fecha_archivo, fecha_carpeta = obtener_fechas()
+    ruta_json, carpeta_destino = preparar_rutas(script_dir, fecha_archivo, fecha_carpeta)
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
-fecha_archivo, fecha_carpeta = obtener_fechas()
-ruta_json, carpeta_destino = preparar_rutas(script_dir, fecha_archivo, fecha_carpeta)
+    print(f"🔍 Buscando archivo: {ruta_json}")
+    mostrar_archivos_en_scrapers(script_dir)
 
-print(f"🔍 Buscando archivo: {ruta_json}")
-mostrar_archivos_en_scrapers(script_dir)
-
-if not os.path.exists(ruta_json):
-    print(f"❌ No se encontró el archivo {ruta_json}")
-else:
-    descargar_pdfs_desde_json(ruta_json, carpeta_destino)
+    if not os.path.exists(ruta_json):
+        print(f"❌ No se encontró el archivo {ruta_json}")
+    else:
+        descargar_pdfs_desde_json(ruta_json, carpeta_destino)

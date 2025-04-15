@@ -99,7 +99,7 @@ if __name__ == "__main__":
 
     # Mostrar los datos extraídos
     for filename, info in extracted_info.items():
-        print(f"\n--- Extraido de {filename} ---")
+        print(f"\n--- Extraído de {filename} ---")
         print(f"Razón Social: {info['razon_social']}")
         print(f"Fundadores: {', '.join(info['fundadores'])}")
         print(f"Fecha: {info['fecha']}")
