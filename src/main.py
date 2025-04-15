@@ -1,14 +1,15 @@
 from scrapers.scrap import get_pdf_links, save_pdf_links_to_json, get_current_date
 from download_pdfs.download import descargar_pdfs_desde_json, preparar_rutas, obtener_fechas
 from pdf_processing.pdf_extractor import extract_from_all_pdfs_in_folder
+from delete_function.delete_files import delete_files_and_folder  # Importar la nueva función
 import os
 
 def main():
     # --- SCRAPING ---
     print("🔍 Iniciando scraping...")
-    url = "https://www.diariooficial.interior.gob.cl/edicionelectronica/empresas_cooperativas.php?date={}&edition=44120".format(get_current_date())
+    url = "https://www.diariooficial.interior.gob.cl/edicionelectronica/empresas_cooperativas.php?date={}&edition=44125".format(get_current_date())
     pdf_links = get_pdf_links(url)
-    
+    print (url)
     if pdf_links:
         save_pdf_links_to_json(pdf_links)
     else:
@@ -38,6 +39,12 @@ def main():
         print(f"Razón Social: {info['razon_social']}")
         print(f"Fundadores: {', '.join(info['fundadores'])}")
         print(f"Fecha: {info['fecha']}")
+
+    # --- ELIMINAR ARCHIVOS Y CARPETAS ---
+    print("🗑️ Eliminando archivos y carpetas...")
+    fecha_carpeta_path = os.path.join(data_folder, fecha_carpeta)  # Ruta de la carpeta con la fecha
+    delete_files_and_folder(fecha_carpeta_path, ruta_json)
+
 
 if __name__ == "__main__":
     main()
