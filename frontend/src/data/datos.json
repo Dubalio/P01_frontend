@@ -1,17 +1,17 @@
 [
   {
-    "rut": "12.345.678-9",
-    "razonSocial": "TechChile SpA",
-    "accionistas": ["Andrea Gómez", "Juan Pérez"]
+    "razon_social": "TechChile SpA",
+    "fundadores": ["Andrea Gómez", "Juan Pérez"],
+    "fecha": "2025-04-22"
   },
   {
-    "rut": "76.543.210-K",
-    "razonSocial": "Innovatek S.A.",
-    "accionistas": ["Carlos Torres", "Andrea Gómez"]
+    "razon_social": "Innovatek S.A.",
+    "fundadores": ["Carlos Torres", "Andrea Gómez"],
+    "fecha": "2025-04-21"
   },
   {
-    "rut": "98.765.432-1",
-    "razonSocial": "BioSmart Ltda.",
-    "accionistas": ["Lucía Ramírez", "Felipe Duarte"]
+    "razon_social": "BioSmart Ltda.",
+    "fundadores": ["Lucía Ramírez", "Felipe Duarte"],
+    "fecha": "2025-04-20"
   }
 ]

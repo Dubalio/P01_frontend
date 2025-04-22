@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import datosEmpresas from './data/datos.json';
 import './index.css';
@@ -15,13 +14,13 @@ function App() {
   const buscarEmpresas = () => {
     const texto = terminoBusqueda.toLowerCase();
     const filtrados = datosEmpresas.filter((empresa) => {
-      if (filtro === 'rut') return empresa.rut.toLowerCase().includes(texto);
-      if (filtro === 'razonSocial') return empresa.razonSocial.toLowerCase().includes(texto);
-      if (filtro === 'accionista') return empresa.accionistas.some(a => a.toLowerCase().includes(texto));
+      if (filtro === 'razonSocial') return empresa.razon_social.toLowerCase().includes(texto);
+      if (filtro === 'fundadores') return empresa.fundadores.some(f => f.toLowerCase().includes(texto));
+      if (filtro === 'fecha') return empresa.fecha.includes(texto);
       return (
-        empresa.rut.toLowerCase().includes(texto) ||
-        empresa.razonSocial.toLowerCase().includes(texto) ||
-        empresa.accionistas.some(a => a.toLowerCase().includes(texto))
+        empresa.razon_social.toLowerCase().includes(texto) ||
+        empresa.fundadores.some(f => f.toLowerCase().includes(texto)) ||
+        empresa.fecha.includes(texto)
       );
     });
     setResultados(filtrados);
@@ -40,11 +39,11 @@ function App() {
       a.click();
       URL.revokeObjectURL(url);
     } else if (formatoExportacion === 'csv') {
-      const encabezados = ['RUT', 'Razón Social', 'Accionistas'];
+      const encabezados = ['Razón Social', 'Fundadores', 'Fecha'];
       const filas = resultados.map(e => [
-        e.rut,
-        e.razonSocial,
-        `"${e.accionistas.join('; ')}"`
+        e.razon_social,
+        `"${e.fundadores.join('; ')}"`,
+        e.fecha
       ]);
       const contenido = [encabezados, ...filas].map(f => f.join(',')).join('\n');
       const blob = new Blob([contenido], { type: 'text/csv' });
@@ -71,14 +70,14 @@ function App() {
         </div>
       </div>
 
-      <p className="busqueda-texto">Busca accionistas o empresas por su nombre o RUT</p>
+      <p className="busqueda-texto">Busca empresas por razón social, fundadores o fecha</p>
 
       <div className="search-bar">
         <select value={filtro} onChange={(e) => setFiltro(e.target.value)}>
           <option value="todos">Todos</option>
-          <option value="rut">RUT</option>
           <option value="razonSocial">Razón Social</option>
-          <option value="accionista">Accionista</option>
+          <option value="fundadores">Fundadores</option>
+          <option value="fecha">Fecha</option>
         </select>
 
         <div className="input-con-lupa">
@@ -103,9 +102,9 @@ function App() {
 
           {resultados.map((empresa, index) => (
             <div key={index} className="result-card">
-              <p><strong>RUT:</strong> {empresa.rut}</p>
-              <p><strong>Razón Social:</strong> {empresa.razonSocial}</p>
-              <p><strong>Accionistas:</strong> {empresa.accionistas.join(', ')}</p>
+              <p><strong>Razón Social:</strong> {empresa.razon_social}</p>
+              <p><strong>Fundadores:</strong> {empresa.fundadores.join(', ')}</p>
+              <p><strong>Fecha:</strong> {empresa.fecha}</p>
             </div>
           ))}
         </>
