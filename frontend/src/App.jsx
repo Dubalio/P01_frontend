@@ -3,10 +3,12 @@ import Header from './components/Header';
 import SearchBar from './components/SearchBar';
 import ResultsList from './components/ResultsList';
 import ExportOptions from './components/ExportOptions';
+import Login from './components/Login'; 
 import datosEmpresas from './data/datos.json';
 import './index.css';
 
 function App() {
+  const [user, setUser] = useState(null);
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
   const [filtro, setFiltro] = useState('todos');
   const [resultados, setResultados] = useState([]);
@@ -31,9 +33,14 @@ function App() {
     setResultados(filtrados);
   };
 
+  if (!user) {
+    return <Login onLogin={setUser} />;
+  }
+
   return (
     <div className="container">
       <Header modoOscuro={modoOscuro} toggleModoOscuro={() => setModoOscuro(!modoOscuro)} />
+      <p>Bienvenido, {user.role === 'profesor' ? 'Profesor' : 'Estudiante'} ({user.email})</p>
       <SearchBar
         terminoBusqueda={terminoBusqueda}
         setTerminoBusqueda={setTerminoBusqueda}
