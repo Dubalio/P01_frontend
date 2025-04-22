@@ -1,0 +1,17 @@
+[
+  {
+    "rut": "12.345.678-9",
+    "razonSocial": "TechChile SpA",
+    "accionistas": ["Andrea Gómez", "Juan Pérez"]
+  },
+  {
+    "rut": "76.543.210-K",
+    "razonSocial": "Innovatek S.A.",
+    "accionistas": ["Carlos Torres", "Andrea Gómez"]
+  },
+  {
+    "rut": "98.765.432-1",
+    "razonSocial": "BioSmart Ltda.",
+    "accionistas": ["Lucía Ramírez", "Felipe Duarte"]
+  }
+]
