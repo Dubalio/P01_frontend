@@ -62,5 +62,16 @@ export class UserRepository {
   static login ({ email, password, role }) {
     this.validateEmail(email)
     this.validatePassword(password)
+    const user = User.findOne({ email })
+    if (!user) {
+      throw new Error('Email no registrado')
+    }
+    const isValid = bcrypt.compareSync(password, user.password)
+    if (!isValid) {
+      throw new Error('Password incorrecto')
+    }
+
+    const {password: _, ...userWithoutPassword} = user
+    return userWithoutPassword
   }
 }

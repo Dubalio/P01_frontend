@@ -9,7 +9,15 @@ app.get('/', (res, req) => {
   res.send('Hello World!')
 })
 
-app.post('/login', (req, res) => {})
+app.post('/login', (req, res) => {
+    const { email, password,role } = req.body
+    try {
+        const user = UserRepository.login({ email, password,role })
+        res.send({ user })
+    } catch (error) {
+        res.status(401).json({ error: error.message })
+    }
+})
 
 app.post('/register', (req, res) => {
     const { email, password, role } = req.body
