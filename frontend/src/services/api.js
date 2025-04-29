@@ -1,7 +1,7 @@
-// filepath: c:\Users\dubal\Documents\UAI\SEMESTRE 9\PROGRA PROFESIONAL\P01\frontend\src\services\api.js
-const API_URL = 'http://localhost:5000'; // URL de tu backend
+const API_BASE_URL = 'http://localhost:5000/api/auth'; // URL base de la API de autenticación
 
-// Función auxiliar para manejar fetch con credenciales y errores
+// --- Función auxiliar para manejar fetch con credenciales y errores ---
+// --- ASEGÚRATE DE QUE ESTA FUNCIÓN ESTÉ DEFINIDA AQUÍ ---
 const fetchWithCredentials = async (url, options = {}) => {
   const defaultOptions = {
     headers: {
@@ -19,80 +19,89 @@ const fetchWithCredentials = async (url, options = {}) => {
     try {
       errorData = await response.json();
     } catch (e) {
-      // Si la respuesta no es JSON
       errorData = { error: `Error ${response.status}: ${response.statusText}` };
     }
-     // Adjuntar el status code al error
     const error = new Error(errorData.error || `Error ${response.status}`);
     error.status = response.status;
     error.code = errorData.code; // Añadir código de error si existe (ej: TOKEN_EXPIRED)
     throw error;
   }
 
-  // Si la respuesta no tiene contenido (ej: 204 No Content)
   if (response.status === 204) {
     return null;
   }
 
-  return response.json();
+  // Solo intenta parsear como JSON si hay contenido
+  const contentType = response.headers.get("content-type");
+  if (contentType && contentType.indexOf("application/json") !== -1) {
+      return response.json();
+  } else {
+      // Si no es JSON, podrías devolver el texto o null, según necesites
+      // return response.text();
+      return null; // O manejarlo como prefieras
+  }
 };
+// --- FIN DE LA DEFINICIÓN DE fetchWithCredentials ---
+
+
+// --- Funciones Exportadas (que usan fetchWithCredentials) ---
 
 export const loginUser = async (credentials) => {
-  return fetchWithCredentials(`${API_URL}/login`, {
+  return fetchWithCredentials(`${API_BASE_URL}/login`, {
     method: 'POST',
     body: JSON.stringify(credentials),
   });
 };
 
 export const registerUser = async (userData) => {
-  return fetchWithCredentials(`${API_URL}/register`, {
+  return fetchWithCredentials(`${API_BASE_URL}/register`, {
     method: 'POST',
     body: JSON.stringify(userData),
   });
 };
 
 export const logoutUser = async () => {
-  return fetchWithCredentials(`${API_URL}/logout`, {
+  // Logout podría no devolver JSON, ajusta fetchWithCredentials si es necesario o maneja aquí
+   await fetchWithCredentials(`${API_BASE_URL}/logout`, {
     method: 'POST',
   });
+   return { success: true }; // Asume éxito si no hay error
 };
 
-// Función para intentar refrescar el token
 export const refreshToken = async () => {
   try {
-    await fetchWithCredentials(`${API_URL}/refresh`, { method: 'POST' });
-    return true; // Refresco exitoso
+    // Refresh podría no devolver JSON, ajusta fetchWithCredentials o maneja aquí
+    await fetchWithCredentials(`${API_BASE_URL}/refresh`, { method: 'POST' });
+    return true;
   } catch (error) {
     console.error("Failed to refresh token:", error);
-    return false; // Refresco fallido
+    return false;
   }
 };
 
-// Ejemplo de cómo podrías interceptar llamadas API para manejar refresh
 export const fetchProtectedData = async (endpoint) => {
+  const url = `${API_BASE_URL}${endpoint}`;
   try {
-    return await fetchWithCredentials(`${API_URL}${endpoint}`);
+    return await fetchWithCredentials(url); // Llama a la función definida arriba
   } catch (error) {
     if (error.code === 'TOKEN_EXPIRED') {
       console.log("Access token expired, attempting refresh...");
       const refreshed = await refreshToken();
       if (refreshed) {
         console.log("Token refreshed, retrying original request...");
-        // Reintentar la solicitud original después del refresh
-        return await fetchWithCredentials(`${API_URL}${endpoint}`);
+        return await fetchWithCredentials(url); // Reintenta
       } else {
-        // Si el refresh falla, probablemente redirigir a login
         console.error("Refresh token failed. User needs to log in again.");
-        // Aquí podrías llamar a una función de logout o redirigir
+        // Aquí podrías forzar un logout o redirigir
+        // await logoutUser(); // Opcional: limpiar cookies si el refresh falla
+        // window.location.href = '/login'; // Opcional: redirigir
         throw new Error("Authentication required.");
       }
     }
-    // Propagar otros errores
     throw error;
   }
 };
 
-// Ejemplo de uso para obtener datos del perfil
 export const getProfile = async () => {
     return fetchProtectedData('/profile');
 }
