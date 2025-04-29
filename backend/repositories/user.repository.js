@@ -1,84 +1,64 @@
-import DBLocal from 'db-local'
-import crypto from 'node:crypto'
-import bcrypt from 'bcrypt'
-import { SALT_ROUNDS } from '../config.js'
-
-const { Schema } = new DBLocal({ path: './db' })
-
-const User = Schema('User', {
-  _id: { type: String, required: true, unique: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: { type: String, enum: ['profesor', 'estudiante'], default: 'estudiante' }
-})
+import User from '../models/user.model.js';
 
 export class UserRepository {
   static validateEmail (email) {
     if (typeof email !== 'string') {
-      throw new Error('Email debe ser un texto')
+      throw new Error('Email debe ser un texto');
     }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      throw new Error('Email con formato inválido')
+      throw new Error('Email con formato inválido');
     }
-
-    return true
+    return true;
   }
 
   static validatePassword (password) {
     if (typeof password !== 'string') {
-      throw new Error('Password debe ser un texto')
+      throw new Error('Password debe ser un texto');
     }
-
     if (password.length < 6) {
-      throw new Error('Password debe contener al menos 6 caracteres')
+      throw new Error('Password debe contener al menos 6 caracteres');
     }
-
-    return true
+    return true;
   }
 
-  static create ({ email, password, role }) {
-    this.validateEmail(email)
-    this.validatePassword(password)
-    const existingUser = User.findOne({ email })
-    if (existingUser) {
-      throw new Error('Email ya registrado')
+  static async create ({ email, password, role }) {
+    this.validateEmail(email);
+    this.validatePassword(password);
+
+    try {
+      const newUser = new User({ email, password, role });
+      await newUser.save();
+      return newUser._id;
+    } catch (error) {
+      if (error.code === 11000) {
+        throw new Error('Email ya registrado');
+      }
+      throw new Error(error.message || 'Error al crear usuario');
     }
-    const id = crypto.randomUUID()
-
-    const hashedPassword = bcrypt.hashSync(password, SALT_ROUNDS)
-
-    User.create({
-      _id: id,
-      email,
-      password: hashedPassword,
-      role
-    }).save()
-    return id
   }
 
-  static login ({ email, password, role }) {
-    this.validateEmail(email)
-    this.validatePassword(password)
-    const user = User.findOne({ email })
+  static async login ({ email, password, role }) {
+    this.validateEmail(email);
+    this.validatePassword(password);
+
+    const user = await User.findOne({ email });
     if (!user) {
-      throw new Error('Email no registrado')
+      throw new Error('Email no registrado');
     }
 
-    const isValid = bcrypt.compareSync(password, user.password)
+    const isValid = await user.comparePassword(password);
     if (!isValid) {
-      throw new Error('Password incorrecto')
+      throw new Error('Password incorrecto');
     }
 
-    const { password: _, ...userWithoutPassword } = user
-    return userWithoutPassword
+    const userObject = user.toObject();
+    delete userObject.password;
+    return userObject;
   }
 
-  static findById (id) {
-    const user = User.findOne({ _id: id })
-    if (!user) return null
-    const { password: _, ...userWithoutPassword } = user
-    return userWithoutPassword
+  static async findById (id) {
+    const user = await User.findById(id).select('-password');
+    return user;
   }
 }
