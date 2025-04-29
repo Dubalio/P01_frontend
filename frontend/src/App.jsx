@@ -3,7 +3,8 @@ import Header from './components/Header';
 import SearchBar from './components/SearchBar';
 import ResultsList from './components/ResultsList';
 import ExportOptions from './components/ExportOptions';
-import Login from './components/Login'; 
+import Login from './components/Login';
+import Register from './components/Register';
 import datosEmpresas from './data/datos.json';
 import './index.css';
 
@@ -13,6 +14,7 @@ function App() {
   const [filtro, setFiltro] = useState('todos');
   const [resultados, setResultados] = useState([]);
   const [modoOscuro, setModoOscuro] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
 
   useEffect(() => {
     document.body.className = modoOscuro ? 'dark' : '';
@@ -33,14 +35,35 @@ function App() {
     setResultados(filtrados);
   };
 
+  const handleLogout = () => {
+    setUser(null);
+  };
+
   if (!user) {
-    return <Login onLogin={setUser} />;
+    if (showRegister) {
+      return (
+        <Register 
+          onRegisterSuccess={() => setShowRegister(false)} 
+          switchToLogin={() => setShowRegister(false)} 
+        />
+      );
+    } else {
+      return (
+        <Login 
+          onLogin={setUser} 
+          switchToRegister={() => setShowRegister(true)} 
+        />
+      );
+    }
   }
 
   return (
     <div className="container">
       <Header modoOscuro={modoOscuro} toggleModoOscuro={() => setModoOscuro(!modoOscuro)} />
-      <p>Bienvenido, {user.role === 'profesor' ? 'Profesor' : 'Estudiante'} ({user.email})</p>
+      <div className="user-info">
+        <p>Bienvenido, {user.role === 'profesor' ? 'Profesor' : 'Estudiante'} ({user.email})</p>
+        <button className="logout-button" onClick={handleLogout}>Cerrar Sesión</button>
+      </div>
       <SearchBar
         terminoBusqueda={terminoBusqueda}
         setTerminoBusqueda={setTerminoBusqueda}
