@@ -1,9 +1,9 @@
 import DBLocal from 'db-local'
 import crypto from 'node:crypto'
 import bcrypt from 'bcrypt'
-import { SALT_ROUNDS } from '../config.js' // Ajusta la ruta a config.js
+import { SALT_ROUNDS } from '../config.js'
 
-const { Schema } = new DBLocal({ path: './db' }) // Mantiene la ruta relativa a la raíz del backend
+const { Schema } = new DBLocal({ path: './db' })
 
 const User = Schema('User', {
   _id: { type: String, required: true, unique: true },
@@ -41,7 +41,6 @@ export class UserRepository {
   static create ({ email, password, role }) {
     this.validateEmail(email)
     this.validatePassword(password)
-    // Asegúrate de que User.findOne funcione correctamente con db-local aquí
     const existingUser = User.findOne({ email })
     if (existingUser) {
       throw new Error('Email ya registrado')
@@ -62,15 +61,11 @@ export class UserRepository {
   static login ({ email, password, role }) {
     this.validateEmail(email)
     this.validatePassword(password)
-    // Asegúrate de que User.findOne funcione correctamente con db-local aquí
     const user = User.findOne({ email })
     if (!user) {
       throw new Error('Email no registrado')
     }
-    // Podrías añadir validación de rol aquí si es necesario
-    // if (user.role !== role) {
-    //   throw new Error('Rol incorrecto para este usuario')
-    // }
+
     const isValid = bcrypt.compareSync(password, user.password)
     if (!isValid) {
       throw new Error('Password incorrecto')
@@ -80,7 +75,6 @@ export class UserRepository {
     return userWithoutPassword
   }
 
-  // Podrías añadir un método para buscar por ID si lo necesitas para el refresh token
   static findById (id) {
     const user = User.findOne({ _id: id })
     if (!user) return null

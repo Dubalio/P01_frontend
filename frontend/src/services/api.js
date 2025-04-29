@@ -1,14 +1,12 @@
-const API_BASE_URL = 'http://localhost:5000/api/auth'; // URL base de la API de autenticación
+const API_BASE_URL = 'http://localhost:5000/api/auth';
 
-// --- Función auxiliar para manejar fetch con credenciales y errores ---
-// --- ASEGÚRATE DE QUE ESTA FUNCIÓN ESTÉ DEFINIDA AQUÍ ---
 const fetchWithCredentials = async (url, options = {}) => {
   const defaultOptions = {
     headers: {
       'Content-Type': 'application/json',
       ...options.headers,
     },
-    credentials: 'include', // ¡Importante para enviar/recibir cookies!
+    credentials: 'include',
     ...options,
   };
 
@@ -23,7 +21,7 @@ const fetchWithCredentials = async (url, options = {}) => {
     }
     const error = new Error(errorData.error || `Error ${response.status}`);
     error.status = response.status;
-    error.code = errorData.code; // Añadir código de error si existe (ej: TOKEN_EXPIRED)
+    error.code = errorData.code;
     throw error;
   }
 
@@ -31,20 +29,14 @@ const fetchWithCredentials = async (url, options = {}) => {
     return null;
   }
 
-  // Solo intenta parsear como JSON si hay contenido
   const contentType = response.headers.get("content-type");
   if (contentType && contentType.indexOf("application/json") !== -1) {
       return response.json();
   } else {
-      // Si no es JSON, podrías devolver el texto o null, según necesites
-      // return response.text();
-      return null; // O manejarlo como prefieras
+      return null;
   }
 };
-// --- FIN DE LA DEFINICIÓN DE fetchWithCredentials ---
 
-
-// --- Funciones Exportadas (que usan fetchWithCredentials) ---
 
 export const loginUser = async (credentials) => {
   return fetchWithCredentials(`${API_BASE_URL}/login`, {
@@ -61,16 +53,14 @@ export const registerUser = async (userData) => {
 };
 
 export const logoutUser = async () => {
-  // Logout podría no devolver JSON, ajusta fetchWithCredentials si es necesario o maneja aquí
    await fetchWithCredentials(`${API_BASE_URL}/logout`, {
     method: 'POST',
   });
-   return { success: true }; // Asume éxito si no hay error
+   return { success: true };
 };
 
 export const refreshToken = async () => {
   try {
-    // Refresh podría no devolver JSON, ajusta fetchWithCredentials o maneja aquí
     await fetchWithCredentials(`${API_BASE_URL}/refresh`, { method: 'POST' });
     return true;
   } catch (error) {
@@ -82,19 +72,16 @@ export const refreshToken = async () => {
 export const fetchProtectedData = async (endpoint) => {
   const url = `${API_BASE_URL}${endpoint}`;
   try {
-    return await fetchWithCredentials(url); // Llama a la función definida arriba
+    return await fetchWithCredentials(url);
   } catch (error) {
     if (error.code === 'TOKEN_EXPIRED') {
       console.log("Access token expired, attempting refresh...");
       const refreshed = await refreshToken();
       if (refreshed) {
         console.log("Token refreshed, retrying original request...");
-        return await fetchWithCredentials(url); // Reintenta
+        return await fetchWithCredentials(url);
       } else {
         console.error("Refresh token failed. User needs to log in again.");
-        // Aquí podrías forzar un logout o redirigir
-        // await logoutUser(); // Opcional: limpiar cookies si el refresh falla
-        // window.location.href = '/login'; // Opcional: redirigir
         throw new Error("Authentication required.");
       }
     }

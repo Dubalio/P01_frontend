@@ -9,10 +9,9 @@ export const authenticateToken = async (req, res, next) => {
 
   try {
     const user = await verifyToken(accessToken)
-    req.user = user // Adjunta la información del usuario decodificada al request
+    req.user = user
     next()
   } catch (err) {
-    // Si el token es inválido o expiró
     if (err.name === 'TokenExpiredError') {
       return res.status(401).json({ error: 'Token expirado', code: 'TOKEN_EXPIRED' })
     }

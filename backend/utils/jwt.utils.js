@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken'
 import { SECRET_JWT_KEY, ACCESS_TOKEN_EXPIRATION, REFRESH_TOKEN_EXPIRATION } from '../config.js'
 
 export const generateAccessToken = (user) => {
-  // Asegúrate de que user tenga id, email y role
   return jwt.sign(
     { id: user._id || user.id, email: user.email, role: user.role },
     SECRET_JWT_KEY,
@@ -11,7 +10,6 @@ export const generateAccessToken = (user) => {
 }
 
 export const generateRefreshToken = (user) => {
-  // Solo necesitamos el id para el refresh token
   return jwt.sign(
     { id: user._id || user.id },
     SECRET_JWT_KEY,

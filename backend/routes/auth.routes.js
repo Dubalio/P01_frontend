@@ -9,7 +9,6 @@ router.post('/login', authController.login)
 router.post('/refresh', authController.refreshTokenHandler)
 router.post('/logout', authController.logout)
 
-// Aplicar middleware de autenticación a esta ruta
 router.get('/profile', authenticateToken, authController.getProfile)
 
 export default router
