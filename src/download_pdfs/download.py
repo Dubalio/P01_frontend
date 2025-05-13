@@ -8,13 +8,11 @@ def obtener_fechas():
     return hoy.strftime("%d-%m-%Y"), hoy.strftime("%Y-%m-%d")
 
 def preparar_rutas(script_dir, fecha_archivo, fecha_carpeta):
-    # Obtener la ruta absoluta de la carpeta base (P01)
     base_dir = os.path.abspath(os.path.join(script_dir, ".."))
-    
-    # Construir la ruta del archivo JSON en src/
+
     ruta_json = os.path.join(base_dir, "src", f"pdf_links_{fecha_archivo}.json")
     
-    # Construir la carpeta destino en data/<fecha>
+
     carpeta_destino = os.path.join(base_dir, "data", fecha_carpeta)
     os.makedirs(carpeta_destino, exist_ok=True)
     

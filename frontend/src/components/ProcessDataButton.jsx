@@ -20,12 +20,12 @@ const handleProcess = async () => {
     });
     setStatusMessage('Procesamiento completado');
     
-    // Llamar a la función para recargar datos
+
     if (props.onProcessComplete) {
       props.onProcessComplete();
     }
   } catch (error) {
-    // Resto del código de manejo de errores
+
   } finally {
     setLoading(false);
   }

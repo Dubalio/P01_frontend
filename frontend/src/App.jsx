@@ -83,13 +83,13 @@ function App() {
 
   const handleLoginSuccess = (loggedInUser) => {
     setUser(loggedInUser);
-    setShowRegister(false); // Asegúrate de volver a la vista principal
+    setShowRegister(false); 
   }
 
   const handleLogout = async () => {
     try {
-      await logoutUser(); // Llama a la API de logout
-      setUser(null); // Limpia el estado del usuario en el frontend
+      await logoutUser();
+      setUser(null); 
     } catch (error) {
       console.error("Error during logout:", error);
 

@@ -8,20 +8,18 @@ import sys
 from pymongo import MongoClient
 import dotenv
 
-# Cargar variables de entorno
 dotenv.load_dotenv()
 
-# Obtener argumentos (si se proporcionó una fecha específica)
+
 fecha_especificada = sys.argv[1] if len(sys.argv) > 1 else None
 
 def main():
-    # Conectar a MongoDB
+
     mongo_uri = os.getenv("MONGO_URI", "mongodb://localhost:27017")
     client = MongoClient(mongo_uri)
     db = client[os.getenv("DB_NAME", "tuBaseDeDatos")]
-    documents_collection = db["documents"]  # Colección separada para documentos
-    
-    # --- SCRAPING ---
+    documents_collection = db["documents"]  
+
     print("[BUSQUEDA] Iniciando scraping...")
     url = "https://www.diariooficial.interior.gob.cl/edicionelectronica/empresas_cooperativas.php?date={}&edition=44147".format(get_current_date())
     pdf_links = get_pdf_links(url)
@@ -32,12 +30,11 @@ def main():
         print("[ERROR] No se encontraron enlaces de PDF.")
         return {"success": False, "message": "No se encontraron enlaces PDF"}
 
-    # --- DESCARGA DE PDFs ---
+
     print("[DESCARGA] Iniciando descarga de PDFs...")
     script_dir = os.path.dirname(os.path.abspath(__file__))
     fecha_archivo, fecha_carpeta = obtener_fechas()
-    
-    # Si se especificó una fecha como argumento, usarla en lugar de la fecha actual
+
     if fecha_especificada:
         fecha_carpeta = fecha_especificada
         print(f"Usando fecha especificada: {fecha_carpeta}")
@@ -50,14 +47,13 @@ def main():
     else:
         descargar_pdfs_desde_json(ruta_json, carpeta_destino)
 
-    # --- PROCESAMIENTO DE PDFs ---
     print("[PROCESO] Iniciando procesamiento de PDFs...")
-    data_folder = os.path.abspath(os.path.join(script_dir, "..", "data"))  # Ajustar la ruta
+    data_folder = os.path.abspath(os.path.join(script_dir, "..", "data")) 
     
-    # Pasar la colección de MongoDB a la función de extracción
+
     result = extract_from_all_pdfs_in_folder(data_folder, documents_collection)
 
-    # --- ELIMINAR ARCHIVOS Y CARPETAS ---
+
     print("[LIMPIEZA] Eliminando archivos y carpetas...")
     fecha_carpeta_path = os.path.join(data_folder, fecha_carpeta)
     delete_files_and_folder(fecha_carpeta_path, ruta_json)
@@ -71,5 +67,4 @@ def main():
 
 if __name__ == "__main__":
     result = main()
-    # Imprimir el resultado como JSON para que lo capture Node.js
     print(json.dumps(result))

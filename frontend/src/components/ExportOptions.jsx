@@ -18,8 +18,7 @@ function ExportOptions({ resultados }) {
         e.fecha
       ]);
       const contenido = [encabezados, ...filas].map(f => f.join(',')).join('\n');
-      
-      // Agregar BOM para UTF-8 (para Excel)
+  
       const BOM = '\uFEFF';
       const csvConBOM = BOM + contenido;
       

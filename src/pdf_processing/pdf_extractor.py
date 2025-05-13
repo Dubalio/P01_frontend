@@ -4,11 +4,7 @@ import os
 from datetime import datetime
 
 def extract_text_from_pdf(pdf_path):
-    """
-    Extracts text from a PDF file.
-    :param pdf_path: Path to the PDF file
-    :return: Extracted text as a string
-    """
+
     text = ""
     try:
         with open(pdf_path, "rb") as file:
@@ -21,33 +17,26 @@ def extract_text_from_pdf(pdf_path):
     return text
 
 def extract_company_info(text):
-    """
-    Extracts company name and RUT from text.
-    :param text: Extracted text from a PDF
-    :return: Dictionary with company name, RUT, and founders' names
-    """
-    # Expresión más robusta para encontrar razón social
+
     company_patterns = [
-        r'[""]([^""]+)[""]',  # Comillas dobles tradicionales o tipográficas
-        r'"([^"]+)"',          # Comillas simples
-        r'sociedad\s+(?:de responsabilidad limitada)?\s*[""]?([^""".,]+)(?:limitada|ltda\.?)[""]?',  # Formatos con "sociedad"
-        r'(?:empresa|compañía|sociedad)\s+[""]?([^""".,]+)(?:limitada|ltda\.?)[""]?',  # Otros formatos comunes
-        r'[""]?([^""".,]+?)(?:limitada|ltda\.?)[""]?',  # Cualquier texto seguido de LIMITADA
+        r'[""]([^""]+)[""]',  
+        r'"([^"]+)"',          
+        r'sociedad\s+(?:de responsabilidad limitada)?\s*[""]?([^""".,]+)(?:limitada|ltda\.?)[""]?',  
+        r'(?:empresa|compañía|sociedad)\s+[""]?([^""".,]+)(?:limitada|ltda\.?)[""]?',  
+        r'[""]?([^""".,]+?)(?:limitada|ltda\.?)[""]?',  
     ]
     
     company_name = "No encontrado"
     
-    # Intentar diferentes patrones hasta encontrar una coincidencia
+
     for pattern in company_patterns:
         company_match = re.search(pattern, text, re.IGNORECASE | re.DOTALL)
         if company_match:
             company_name = company_match.group(1).strip().replace("\n", " ")
             break
-            
-    # Buscar nombres de fundadores (resto del código igual)
+
     founders = re.findall(r'\b(?:don|doña)\s+((?:[A-ZÁÉÍÓÚ][a-záéíóú]+(?:\s+|$)){1,4})', text, re.IGNORECASE)
 
-    # Normalizar nombres (resto del código igual)
     normalized_founders = set()
     unique_founders = []
     for founder in founders:
@@ -62,16 +51,11 @@ def extract_company_info(text):
     }
 
 def extract_from_all_pdfs_in_folder(folder_path, mongo_collection):
-    """
-    Extracts company info from all PDF files in subfolders and saves to MongoDB.
-    :param folder_path: Path to the folder containing subfolders with PDF files
-    :param mongo_collection: MongoDB collection where data will be stored
-    :return: Dictionary with processing statistics
-    """
+
     processed_count = 0
     skipped_count = 0
     
-    # Recorrer las subcarpetas dentro de la carpeta principal
+
     for subfolder in os.listdir(folder_path):
         subfolder_path = os.path.join(folder_path, subfolder)
         if os.path.isdir(subfolder_path) and re.match(r"\d{4}-\d{2}-\d{2}", subfolder):
@@ -82,39 +66,39 @@ def extract_from_all_pdfs_in_folder(folder_path, mongo_collection):
                     pdf_path = os.path.join(subfolder_path, filename)
                     print(f"Procesando: {filename}")
                     
-                    # Extraer texto e información del PDF
+
                     extracted_text = extract_text_from_pdf(pdf_path)
                     company_info = extract_company_info(extracted_text)
                     
-                    # NUEVO: Verificar si tiene campos válidos (no "No encontrado")
+        
                     if company_info["razon_social"] == "No encontrado":
                         print(f"Saltando {filename} (razón social no encontrada)")
                         skipped_count += 1
                         continue
                     
-                    # NUEVO: Verificar que tenga al menos un fundador válido
+
                     valid_founders = [f for f in company_info["fundadores"] if f != "No encontrado"]
                     if not valid_founders:
                         print(f"Saltando {filename} (no se encontraron fundadores)")
                         skipped_count += 1
                         continue
                     
-                    # NUEVO: Verificar si la razón social ya existe en la base de datos
+
                     existing_company = mongo_collection.find_one({"razon_social": company_info["razon_social"]})
                     if existing_company:
                         print(f"Saltando {filename} (razón social ya existe en la base de datos)")
                         skipped_count += 1
                         continue
                     
-                    # MODIFICADO: Preparar documento para MongoDB (sin filename)
+
                     document = {
                         "razon_social": company_info["razon_social"],
-                        "fundadores": valid_founders,  # Solo los fundadores válidos
+                        "fundadores": valid_founders,  
                         "fecha": subfolder,
                         "created_at": datetime.now()
                     }
                     
-                    # Guardar en MongoDB
+
                     try:
                         mongo_collection.insert_one(document)
                         processed_count += 1
@@ -125,4 +109,3 @@ def extract_from_all_pdfs_in_folder(folder_path, mongo_collection):
     print(f"\nResumen: {processed_count} documentos procesados, {skipped_count} saltados")
     return {"procesados": processed_count, "saltados": skipped_count}
 
-# Remover la función main ya que ahora no se ejecutará directamente
