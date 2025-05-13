@@ -5,6 +5,7 @@ import ResultsList from './components/ResultsList';
 import ExportOptions from './components/ExportOptions';
 import Login from './components/Login';
 import Register from './components/Register';
+import ProcessDataButton from './components/ProcessDataButton';
 
 import { logoutUser, getProfile } from './services/api';
 import datosEmpresas from './data/datos.json'; 
@@ -113,6 +114,15 @@ function App() {
       />
       <ResultsList resultados={resultados} />
       <ExportOptions resultados={resultados} />
+      <ExportOptions resultados={resultados} />
+      {/* El botón de procesamiento para cualquier usuario autenticado */}
+      {user && (
+        <div className="admin-section">
+          <h3>Procesamiento de Datos</h3>
+          <ProcessDataButton />
+        </div>
+      )}
+
     </div>
   );
 }

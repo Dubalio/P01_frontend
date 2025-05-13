@@ -3,6 +3,8 @@ import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import { PORT, MONGO_URI } from './config.js';
 import authRouter from './routes/auth.routes.js';
+import documentsRouter from './routes/documents.routes.js'; 
+
 
 mongoose.connect(MONGO_URI)
   .then(() => console.log('✅ Conectado a MongoDB Atlas'))
@@ -33,6 +35,8 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', authRouter);
+app.use('/api/documents', documentsRouter); 
+
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

@@ -23,7 +23,7 @@ def preparar_rutas(script_dir, fecha_archivo, fecha_carpeta):
 
 def mostrar_archivos_en_scrapers(script_dir):
     scrapers_path = os.path.abspath(os.path.join(script_dir, "..", "scrapers"))
-    print(f"📁 Archivos en scrapers/: {os.listdir(scrapers_path)}")
+    print(f" Archivos en scrapers/: {os.listdir(scrapers_path)}")
 
 def descargar_pdfs_desde_json(ruta_json, carpeta_destino):
     with open(ruta_json, "r", encoding="utf-8") as file:
@@ -36,9 +36,9 @@ def descargar_pdfs_desde_json(ruta_json, carpeta_destino):
             nombre_pdf = os.path.join(carpeta_destino, f"archivo_{i+1}.pdf")
             with open(nombre_pdf, "wb") as f:
                 f.write(response.content)
-            print(f"✅ Descargado: {nombre_pdf}")
+            print(f" Descargado: {nombre_pdf}")
         except Exception as e:
-            print(f"⚠️ Error al descargar {url}: {e}")
+            print(f" Error al descargar {url}: {e}")
 
 
 if __name__ == "__main__":
@@ -46,10 +46,10 @@ if __name__ == "__main__":
     fecha_archivo, fecha_carpeta = obtener_fechas()
     ruta_json, carpeta_destino = preparar_rutas(script_dir, fecha_archivo, fecha_carpeta)
 
-    print(f"🔍 Buscando archivo: {ruta_json}")
+    print(f" Buscando archivo: {ruta_json}")
     mostrar_archivos_en_scrapers(script_dir)
 
     if not os.path.exists(ruta_json):
-        print(f"❌ No se encontró el archivo {ruta_json}")
+        print(f" No se encontró el archivo {ruta_json}")
     else:
         descargar_pdfs_desde_json(ruta_json, carpeta_destino)
