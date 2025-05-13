@@ -112,3 +112,22 @@ export const processDocuments = async () => {
     throw error;
   }
 };
+
+// Añadir al final del archivo
+export const getDocuments = async () => {
+  try {
+    return await fetchWithCredentials(`${DOCS_API_URL}/`, {
+      method: 'GET',
+    });
+  } catch (error) {
+    if (error.code === 'TOKEN_EXPIRED') {
+      const refreshed = await refreshToken();
+      if (refreshed) {
+        return await fetchWithCredentials(`${DOCS_API_URL}/`, {
+          method: 'GET',
+        });
+      }
+    }
+    throw error;
+  }
+};

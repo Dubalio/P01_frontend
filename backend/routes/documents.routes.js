@@ -60,4 +60,17 @@ router.post('/process', authenticateToken, (req, res) => {
   });
 });
 
+router.get('/', authenticateToken, async (req, res) => {
+  try {
+    // Conectar a MongoDB y obtener la colección de documentos
+    const db = req.app.locals.db;
+    const documents = await db.collection('documents').find({}).toArray();
+    
+    return res.json({ success: true, documents });
+  } catch (error) {
+    console.error('Error obteniendo documentos:', error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+});
+
 export default router;

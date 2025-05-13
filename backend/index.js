@@ -7,7 +7,11 @@ import documentsRouter from './routes/documents.routes.js';
 
 
 mongoose.connect(MONGO_URI)
-  .then(() => console.log('✅ Conectado a MongoDB Atlas'))
+  .then(() => {
+    console.log('✅ Conectado a MongoDB Atlas');
+    // Guardar la referencia a la base de datos
+    app.locals.db = mongoose.connection.db;
+  })
   .catch((err) => console.error('❌ Error conectando a MongoDB:', err));
 
 const app = express();
