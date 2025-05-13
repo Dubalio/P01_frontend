@@ -26,18 +26,31 @@ def extract_company_info(text):
     :param text: Extracted text from a PDF
     :return: Dictionary with company name, RUT, and founders' names
     """
-    # Buscar la razón social (primer texto entre comillas dobles o tipográficas)
-    company_match = re.search(r'[""]([^""]+)[""]', text, re.DOTALL)
-    company_name = company_match.group(1).strip().replace("\n", " ") if company_match else "No encontrado"
-
-    # Buscar nombres de fundadores
+    # Expresión más robusta para encontrar razón social
+    company_patterns = [
+        r'[""]([^""]+)[""]',  # Comillas dobles tradicionales o tipográficas
+        r'"([^"]+)"',          # Comillas simples
+        r'sociedad\s+(?:de responsabilidad limitada)?\s*[""]?([^""".,]+)(?:limitada|ltda\.?)[""]?',  # Formatos con "sociedad"
+        r'(?:empresa|compañía|sociedad)\s+[""]?([^""".,]+)(?:limitada|ltda\.?)[""]?',  # Otros formatos comunes
+        r'[""]?([^""".,]+?)(?:limitada|ltda\.?)[""]?',  # Cualquier texto seguido de LIMITADA
+    ]
+    
+    company_name = "No encontrado"
+    
+    # Intentar diferentes patrones hasta encontrar una coincidencia
+    for pattern in company_patterns:
+        company_match = re.search(pattern, text, re.IGNORECASE | re.DOTALL)
+        if company_match:
+            company_name = company_match.group(1).strip().replace("\n", " ")
+            break
+            
+    # Buscar nombres de fundadores (resto del código igual)
     founders = re.findall(r'\b(?:don|doña)\s+((?:[A-ZÁÉÍÓÚ][a-záéíóú]+(?:\s+|$)){1,4})', text, re.IGNORECASE)
 
-    # Normalizar nombres eliminando espacios extra y duplicados
+    # Normalizar nombres (resto del código igual)
     normalized_founders = set()
     unique_founders = []
     for founder in founders:
-        # Convertir a minúsculas y eliminar espacios adicionales
         normalized_name = " ".join(founder.split()).lower()
         if normalized_name not in normalized_founders:
             normalized_founders.add(normalized_name)
