@@ -57,10 +57,10 @@ def main():
     # Pasar la colección de MongoDB a la función de extracción
     result = extract_from_all_pdfs_in_folder(data_folder, documents_collection)
 
-    # # --- ELIMINAR ARCHIVOS Y CARPETAS ---
-    # print("[LIMPIEZA] Eliminando archivos y carpetas...")
-    # fecha_carpeta_path = os.path.join(data_folder, fecha_carpeta)
-    # delete_files_and_folder(fecha_carpeta_path, ruta_json)
+    # --- ELIMINAR ARCHIVOS Y CARPETAS ---
+    print("[LIMPIEZA] Eliminando archivos y carpetas...")
+    fecha_carpeta_path = os.path.join(data_folder, fecha_carpeta)
+    delete_files_and_folder(fecha_carpeta_path, ruta_json)
 
     return {
         "success": True,
