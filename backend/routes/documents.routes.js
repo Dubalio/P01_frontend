@@ -8,17 +8,17 @@ const router = Router();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '../..');
 
-// Endpoint para procesar PDFs
+
 router.post('/process', authenticateToken, (req, res) => {
-  // Fecha actual en formato YYYY-MM-DD
+
   const today = new Date().toISOString().split('T')[0];
   
   console.log(`Iniciando procesamiento para fecha: ${today}`);
   
-  // Usar main.py en lugar de run_extraction.py
+
   const pythonScript = path.join(rootDir, 'src', 'main.py');
   
-  // Ejecuta el script Python
+
   const pythonProcess = spawn('python', [pythonScript, today]);
   
   let output = '';
