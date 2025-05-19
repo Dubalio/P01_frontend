@@ -1,4 +1,6 @@
 const API_BASE_URL = 'http://localhost:5000/api/auth';
+const DOCS_API_URL = 'http://localhost:5000/api/documents';
+
 
 const fetchWithCredentials = async (url, options = {}) => {
   const defaultOptions = {
@@ -91,4 +93,41 @@ export const fetchProtectedData = async (endpoint) => {
 
 export const getProfile = async () => {
     return fetchProtectedData('/profile');
-}
+};
+
+export const processDocuments = async () => {
+  try {
+    return await fetchWithCredentials(`${DOCS_API_URL}/process`, {
+      method: 'POST',
+    });
+  } catch (error) {
+    if (error.code === 'TOKEN_EXPIRED') {
+      const refreshed = await refreshToken();
+      if (refreshed) {
+        return await fetchWithCredentials(`${DOCS_API_URL}/process`, {
+          method: 'POST',
+        });
+      }
+    }
+    throw error;
+  }
+};
+
+// Añadir al final del archivo
+export const getDocuments = async () => {
+  try {
+    return await fetchWithCredentials(`${DOCS_API_URL}/`, {
+      method: 'GET',
+    });
+  } catch (error) {
+    if (error.code === 'TOKEN_EXPIRED') {
+      const refreshed = await refreshToken();
+      if (refreshed) {
+        return await fetchWithCredentials(`${DOCS_API_URL}/`, {
+          method: 'GET',
+        });
+      }
+    }
+    throw error;
+  }
+};

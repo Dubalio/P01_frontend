@@ -18,7 +18,11 @@ function ExportOptions({ resultados }) {
         e.fecha
       ]);
       const contenido = [encabezados, ...filas].map(f => f.join(',')).join('\n');
-      const blob = new Blob([contenido], { type: 'text/csv' });
+  
+      const BOM = '\uFEFF';
+      const csvConBOM = BOM + contenido;
+      
+      const blob = new Blob([csvConBOM], { type: 'text/csv;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;

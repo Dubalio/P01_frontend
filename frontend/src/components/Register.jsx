@@ -13,8 +13,7 @@ function Register({ onRegisterSuccess, switchToLogin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
-    // Validaciones básicas
+
     if (password !== confirmPassword) {
       setError('Las contraseñas no coinciden');
       return;
