@@ -1,0 +1,19 @@
+{
+  "name": "frontend-final",
+  "version": "1.0.0",
+  "description": "Proyecto React + Vite que permite buscar y exportar datos de empresas.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-force-graph": "^1.47.6"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.0.0",
+    "vite": "^5.0.0"
+  }
+}
