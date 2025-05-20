@@ -5,15 +5,6 @@ import { PORT, MONGO_URI } from './config.js';
 import authRouter from './routes/auth.routes.js';
 import documentsRouter from './routes/documents.routes.js'; 
 
-
-mongoose.connect(MONGO_URI)
-  .then(() => {
-    console.log('✅ Conectado a MongoDB Atlas');
-    
-    app.locals.db = mongoose.connection.db;
-  })
-  .catch((err) => console.error('❌ Error conectando a MongoDB:', err));
-
 const app = express();
 
 app.use(express.json());
@@ -34,13 +25,21 @@ app.use((req, res, next) => {
   next();
 });
 
+
+mongoose.connect(MONGO_URI)
+  .then(() => {
+    console.log('✅ Conectado a MongoDB Atlas');
+    
+    app.locals.db = mongoose.connection.db;
+  })
+  .catch((err) => console.error('❌ Error conectando a MongoDB:', err));
+
 app.get('/', (req, res) => {
   res.send('API Backend P01 is running!');
 });
 
 app.use('/api/auth', authRouter);
 app.use('/api/documents', documentsRouter); 
-
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
