@@ -58,7 +58,7 @@ function App() {
     }
   };
 
-  // Efecto para cargar datos cuando el usuario inicia sesión
+
   useEffect(() => {
     if (user) {
       cargarDatos();

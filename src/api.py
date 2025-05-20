@@ -16,7 +16,7 @@ def get_all_data():
 
     return jsonify(data)
 
-    @app.route('/api/empresa/<string:filename>', methods=['GET'])
+@app.route('/api/empresa/<string:filename>', methods=['GET'])
 def get_empresa_by_filename(filename):
     if not os.path.exists(DATA_PATH):
         return jsonify({"error": "Archivo de datos no encontrado."}), 404
