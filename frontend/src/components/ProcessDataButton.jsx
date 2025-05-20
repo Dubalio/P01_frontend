@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { processDocuments } from '../services/api';
 
-const ProcessDataButton = () => {
+const ProcessDataButton = ({ onProcessComplete }) => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [statusMessage, setStatusMessage] = useState('');
@@ -21,8 +21,8 @@ const handleProcess = async () => {
     setStatusMessage('Procesamiento completado');
     
 
-    if (props.onProcessComplete) {
-      props.onProcessComplete();
+    if (onProcessComplete) {
+      onProcessComplete();
     }
   } catch (error) {
 
