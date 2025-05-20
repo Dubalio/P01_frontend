@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
-import Dashboard from './components/Dashboard'; // Nuevo componente para organizar mejor
+import Dashboard from './components/Dashboard';
+import GraphPage from './components/Graphpage'; 
 import { getProfile } from './services/api';
 import './index.css';
 
@@ -40,6 +41,7 @@ function App() {
       <Route path="/login" element={!user ? <Login onLogin={handleLoginSuccess} /> : <Navigate to="/dashboard" />} />
       <Route path="/register" element={!user ? <Register onRegisterSuccess={handleLoginSuccess} /> : <Navigate to="/dashboard" />} />
       <Route path="/dashboard" element={user ? <Dashboard user={user} setUser={setUser} /> : <Navigate to="/login" />} />
+      <Route path="/graph" element={user ? <GraphPage /> : <Navigate to="/login" />} />
       <Route path="*" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
     </Routes>
   );

@@ -62,6 +62,10 @@ function Dashboard({ user, setUser }) {
       console.error("Error during logout:", error);
     }
   };
+  
+  const handleVerGrafo = () => {
+    navigate('/graph', { state: { data: empresasData } });
+  };
 
   return (
     <div className="container">
@@ -94,6 +98,16 @@ function Dashboard({ user, setUser }) {
       <div className="admin-section">
         <h3>Procesamiento de Datos</h3>
         <ProcessDataButton onProcessComplete={cargarDatos} />
+        
+
+        <button 
+          onClick={handleVerGrafo}
+          className="graph-button"
+          disabled={empresasData.length === 0}
+          style={{ marginTop: '10px' }}
+        >
+          Ver Grafo de Relaciones
+        </button>
       </div>
     </div>
   );
