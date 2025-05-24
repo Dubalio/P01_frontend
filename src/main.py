@@ -21,7 +21,7 @@ def main():
 
     print("[BUSQUEDA] Iniciando scraping...")
     current_date = get_current_date()
-    edition_number = calculate_edition_number(reference_date_str="20-05-2025", reference_edition=44153, target_date_str=current_date)
+    edition_number = calculate_edition_number(reference_date_str="20-05-2025", reference_edition=44152, target_date_str=current_date)
     url = "https://www.diariooficial.interior.gob.cl/edicionelectronica/empresas_cooperativas.php?date={}&edition={}".format(current_date, edition_number)
     pdf_links = get_pdf_links(url)
     print(f"URL: {url} (Edición: {edition_number})")

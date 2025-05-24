@@ -9,7 +9,7 @@ def get_current_date():
     return datetime.now().strftime('%d-%m-%Y')
 
 # Función para calcular el número de edición basado en una fecha de referencia
-def calculate_edition_number(reference_date_str="20-05-2025", reference_edition=44153, target_date_str=None):
+def calculate_edition_number(reference_date_str="20-05-2025", reference_edition=44152, target_date_str=None):
     """
     Calcula el número de edición basado en una fecha de referencia.
     
