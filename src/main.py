@@ -1,4 +1,4 @@
-from scrapers.scrap import get_pdf_links, save_pdf_links_to_json, get_current_date
+from scrapers.scrap import get_pdf_links, save_pdf_links_to_json, get_current_date, calculate_edition_number
 from download_pdfs.download import descargar_pdfs_desde_json, preparar_rutas, obtener_fechas
 from pdf_processing.pdf_extractor import extract_from_all_pdfs_in_folder
 from delete_function.delete_files import delete_files_and_folder
@@ -14,16 +14,17 @@ dotenv.load_dotenv()
 fecha_especificada = sys.argv[1] if len(sys.argv) > 1 else None
 
 def main():
-
     mongo_uri = os.getenv("MONGO_URI", "mongodb://localhost:27017")
     client = MongoClient(mongo_uri)
     db = client[os.getenv("DB_NAME", "tuBaseDeDatos")]
-    documents_collection = db["documents"]  
+    documents_collection = db["documents"]
 
     print("[BUSQUEDA] Iniciando scraping...")
-    url = "https://www.diariooficial.interior.gob.cl/edicionelectronica/empresas_cooperativas.php?date={}&edition=44153".format(get_current_date())
+    current_date = get_current_date()
+    edition_number = calculate_edition_number(reference_date_str="20-05-2025", reference_edition=44152, target_date_str=current_date)
+    url = "https://www.diariooficial.interior.gob.cl/edicionelectronica/empresas_cooperativas.php?date={}&edition={}".format(current_date, edition_number)
     pdf_links = get_pdf_links(url)
-    print(url)
+    print(f"URL: {url} (Edición: {edition_number})")
     if pdf_links:
         save_pdf_links_to_json(pdf_links)
     else:

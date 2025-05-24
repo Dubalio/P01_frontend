@@ -113,7 +113,7 @@ export const processDocuments = async () => {
   }
 };
 
-// Añadir al final del archivo
+
 export const getDocuments = async () => {
   try {
     return await fetchWithCredentials(`${DOCS_API_URL}/`, {

@@ -17,7 +17,7 @@ def extract_text_from_pdf(pdf_path):
     return text
 
 def extract_company_info(text):
-
+    # Simplificado para buscar solo entre comillas (cualquier tipo)
     company_patterns = [
         r'[""]([^""]+)[""]',  
         r'"([^"]+)"',          
@@ -28,20 +28,57 @@ def extract_company_info(text):
     
     company_name = "No encontrado"
     
-
     for pattern in company_patterns:
         company_match = re.search(pattern, text, re.IGNORECASE | re.DOTALL)
         if company_match:
             company_name = company_match.group(1).strip().replace("\n", " ")
             break
 
+    # Búsqueda de fundadores sigue igual
     founders = re.findall(r'\b(?:don|doña)\s+((?:[A-ZÁÉÍÓÚ][a-záéíóú]+(?:\s+|$)){1,4})', text, re.IGNORECASE)
 
+    # Mejor detección de duplicados para el caso de hermanos
     normalized_founders = set()
     unique_founders = []
+    
     for founder in founders:
+        # Normaliza eliminando espacios extras y convirtiendo a minúsculas
         normalized_name = " ".join(founder.split()).lower()
-        if normalized_name not in normalized_founders:
+        
+        # Parse nombre en componentes
+        name_parts = normalized_name.split()
+        
+        # Si el nombre es muy corto, no podemos analizarlo bien
+        if len(name_parts) <= 1:
+            if normalized_name not in normalized_founders:
+                normalized_founders.add(normalized_name)
+                unique_founders.append(founder.strip())
+            continue
+        
+        # Asumimos que el primer componente es el nombre
+        first_name = name_parts[0]
+        
+        # Verificamos si ya existe un fundador con el mismo nombre
+        duplicate = False
+        for existing in normalized_founders:
+            existing_parts = existing.split()
+            if len(existing_parts) <= 1:
+                continue
+                
+            # Si el nombre de pila es igual, verificamos si son la misma persona
+            if existing_parts[0] == first_name:
+                # Solo consideramos duplicado si tienen más del 80% de coincidencia en apellidos
+                remaining_existing = set(existing_parts[1:])
+                remaining_new = set(name_parts[1:])
+                
+                # Si todos los apellidos coinciden o uno está contenido en el otro completamente
+                if remaining_existing == remaining_new or \
+                   remaining_existing.issubset(remaining_new) or \
+                   remaining_new.issubset(remaining_existing):
+                    duplicate = True
+                    break
+        
+        if not duplicate:
             normalized_founders.add(normalized_name)
             unique_founders.append(founder.strip())
 
