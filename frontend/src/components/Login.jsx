@@ -66,7 +66,7 @@ function Login({ onLogin, switchToRegister }) {
         </button>
       </form>
       <p className="switch-auth">
-        ¿Ya tienes una cuenta? <Link to="/login">Iniciar Sesión</Link>
+        ¿No tienes una cuenta? <Link to="/register">Registrarse</Link>
       </p>
     </div>
   );
