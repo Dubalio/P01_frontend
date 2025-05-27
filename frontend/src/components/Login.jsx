@@ -13,7 +13,7 @@ function Login({ onLogin, switchToRegister }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
+
     try {
       setLoading(true);
       const response = await loginUser({ email, password, role });
@@ -66,7 +66,7 @@ function Login({ onLogin, switchToRegister }) {
         </button>
       </form>
       <p className="switch-auth">
-        ¿Ya tienes una cuenta? <Link to="/login">Iniciar Sesión</Link>
+        ¿No tienes una cuenta? <Link to="/Register">Registrar Sesión</Link>
       </p>
     </div>
   );
