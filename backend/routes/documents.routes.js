@@ -62,7 +62,7 @@ router.post('/process', authenticateToken, (req, res) => {
 
 router.get('/', authenticateToken, async (req, res) => {
   try {
-    // Conectar a MongoDB y obtener la colección de documentos
+  
     const db = req.app.locals.db;
     const documents = await db.collection('documents').find({}).toArray();
     

@@ -1,0 +1,157 @@
+.container {
+  background: #f5f6fa;
+  min-height: 100vh;
+  padding: 40px 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  transition: background 0.3s;
+}
+
+.user-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1976d2;
+  color: #fff;
+  padding: 18px 32px;
+  border-radius: 10px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+  transition: background 0.3s, color 0.3s;
+}
+
+.logout-button {
+  background: #fff;
+  color: #1976d2;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.logout-button:hover {
+  background: #e3eafc;
+}
+
+.reload-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.reload-button {
+  background: #43a047;
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.reload-button:disabled {
+  background: #bdbdbd;
+  cursor: not-allowed;
+}
+
+.admin-section {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  padding: 24px;
+  margin-top: 32px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.graph-button {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.graph-button:disabled {
+  background: #bdbdbd;
+  cursor: not-allowed;
+}
+
+/* MODO OSCURO */
+body.dark .container {
+  background: #181a1b;
+}
+
+body.dark .user-info {
+  background: #23272f;
+  color: #fff;
+}
+
+body.dark .logout-button {
+  background: #23272f;
+  color: #fff;
+  border: 1px solid #1976d2;
+}
+body.dark .logout-button:hover {
+  background: #1976d2;
+  color: #fff;
+}
+
+body.dark .admin-section {
+  background: #23272f;
+  color: #fff;
+}
+
+body.dark .reload-button {
+  background: #388e3c;
+}
+
+body.dark .graph-button {
+  background: #1976d2;
+  color: #fff;
+}
+.process-button {
+  background: #43a047;
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.process-button.loading {
+  background: #bdbdbd;
+  cursor: not-allowed;
+}
+
+.process-button:hover {
+  background: #388e3c;
+}
+
+.processing-status {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+}
+
+.result-box {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.result-box.success {
+  background: #e8f5e9;
+  color: #43a047;
+}
+
+.result-box.error {
+  background: #ffebee;
+  color: #e53935;
+}

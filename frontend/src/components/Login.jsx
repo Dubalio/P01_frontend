@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { loginUser } from '../services/api';
 import './Login.css';
+import { Link } from 'react-router-dom';
 
 function Login({ onLogin, switchToRegister }) {
   const [email, setEmail] = useState('');
@@ -12,7 +13,7 @@ function Login({ onLogin, switchToRegister }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
+
     try {
       setLoading(true);
       const response = await loginUser({ email, password, role });
@@ -65,7 +66,7 @@ function Login({ onLogin, switchToRegister }) {
         </button>
       </form>
       <p className="switch-auth">
-        ¿No tienes una cuenta? <a href="#" onClick={switchToRegister}>Registrarse</a>
+        ¿No tienes una cuenta? <Link to="/Register">Registrar Sesión</Link>
       </p>
     </div>
   );

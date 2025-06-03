@@ -1,12 +1,45 @@
 import requests
 from bs4 import BeautifulSoup
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 
 # Función para obtener la fecha actual
 def get_current_date():
     return datetime.now().strftime('%d-%m-%Y')
+
+# Función para calcular el número de edición basado en una fecha de referencia
+def calculate_edition_number(reference_date_str="20-05-2025", reference_edition=44152, target_date_str=None):
+    """
+    Calcula el número de edición basado en una fecha de referencia.
+    Se salta los domingos.
+    
+    Args:
+        reference_date_str: Fecha de referencia en formato DD-MM-YYYY
+        reference_edition: Número de edición para la fecha de referencia
+        target_date_str: Fecha objetivo en formato DD-MM-YYYY (si es None, se usa la fecha actual)
+    
+    Returns:
+        Número de edición para la fecha objetivo
+    """
+    if target_date_str is None:
+        target_date_str = get_current_date()
+    
+    # Convertir las fechas de string a objetos datetime
+    reference_date = datetime.strptime(reference_date_str, '%d-%m-%Y')
+    target_date = datetime.strptime(target_date_str, '%d-%m-%Y')
+    
+    # Inicializar el número de edición
+    edition_number = reference_edition
+    
+    # Iterar desde la fecha de referencia hasta la fecha objetivo
+    current_date = reference_date
+    while current_date < target_date:
+        current_date += timedelta(days=1)
+        if current_date.weekday() != 6:  # Saltar los domingos (6 = domingo)
+            edition_number += 1
+    
+    return edition_number
 
 # Función para extraer los enlaces de los PDFs
 def get_pdf_links(url):
