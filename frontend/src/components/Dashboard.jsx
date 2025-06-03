@@ -6,6 +6,7 @@ import ResultsList from './ResultsList';
 import ExportOptions from './ExportOptions';
 import ProcessDataButton from './ProcessDataButton';
 import { logoutUser, getDocuments } from '../services/api';
+import './Dashboard.css';
 
 function Dashboard({ user, setUser }) {
   const navigate = useNavigate();
