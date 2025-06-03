@@ -87,7 +87,7 @@ function Register({ onRegisterSuccess, switchToLogin }) {
         </button>
       </form>
       <p className="switch-auth">
-        ¿Ya tienes una cuenta? <Link to="/login">Iniciar Sesión</Link>
+        ¿Ya tienes una cuenta? <a href="Login" onClick={switchToLogin}>Iniciar Sesión</a>
       </p>
     </div>
   );
