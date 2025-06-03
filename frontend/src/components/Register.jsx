@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { registerUser } from '../services/api';
 import './Login.css';
+import { Link } from 'react-router-dom';
 
 function Register({ onRegisterSuccess, switchToLogin }) {
   const [email, setEmail] = useState('');
@@ -86,7 +87,7 @@ function Register({ onRegisterSuccess, switchToLogin }) {
         </button>
       </form>
       <p className="switch-auth">
-        ¿Ya tienes una cuenta? <a href="#" onClick={switchToLogin}>Iniciar Sesión</a>
+        ¿Ya tienes una cuenta? <Link to="/login">Iniciar Sesión</Link>
       </p>
     </div>
   );
