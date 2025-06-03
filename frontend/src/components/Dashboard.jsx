@@ -99,8 +99,10 @@ function Dashboard({ user, setUser }) {
       <div className="admin-section">
         <h3>Procesamiento de Datos</h3>
         <ProcessDataButton onProcessComplete={cargarDatos} />
-        
-
+      </div> 
+      <div>
+        <h3>Grafo de Relaciones</h3>
+        <p>Aquí puedes visualizar el grafo de relaciones entre las empresas.</p>
         <button 
           onClick={handleVerGrafo}
           className="graph-button"

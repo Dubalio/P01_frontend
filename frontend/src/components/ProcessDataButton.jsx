@@ -6,42 +6,45 @@ const ProcessDataButton = ({ onProcessComplete }) => {
   const [result, setResult] = useState(null);
   const [statusMessage, setStatusMessage] = useState('');
   
-const handleProcess = async () => {
-  setLoading(true);
-  setResult(null);
-  setStatusMessage('Procesando información del Diario Oficial...');
-  
-  try {
-    const response = await processDocuments();
-    setResult({
-      success: true,
-      message: response.message || 'Procesamiento completado',
-      data: response.result
-    });
-    setStatusMessage('Procesamiento completado');
+  const handleProcess = async () => {
+    setLoading(true);
+    setResult(null);
+    setStatusMessage('Procesando información del Diario Oficial...');
     
-
-    if (onProcessComplete) {
-      onProcessComplete();
+    try {
+      const response = await processDocuments();
+      setResult({
+        success: true,
+        message: response.message || 'Procesamiento completado',
+        data: response.result
+      });
+      setStatusMessage('Procesamiento completado');
+      
+      if (onProcessComplete) {
+        onProcessComplete();
+      }
+    } catch (error) {
+      setResult({
+        success: false,
+        message: 'Error durante el procesamiento',
+      });
+      setStatusMessage('Error durante el procesamiento');
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-
-  } finally {
-    setLoading(false);
-  }
-};
+  };
   
   return (
     <div className="process-container">
       <button 
         onClick={handleProcess} 
         disabled={loading}
-        className="process-button"
+        className={`process-button ${loading ? 'loading' : ''}`}
       >
         {loading ? 'Procesando...' : 'Procesar PDFs de hoy'}
       </button>
       
-      {loading && (
+      {statusMessage && (
         <div className="processing-status">
           <p>{statusMessage}</p>
         </div>

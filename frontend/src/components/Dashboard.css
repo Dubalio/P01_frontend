@@ -111,3 +111,47 @@ body.dark .graph-button {
   background: #1976d2;
   color: #fff;
 }
+.process-button {
+  background: #43a047;
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.process-button.loading {
+  background: #bdbdbd;
+  cursor: not-allowed;
+}
+
+.process-button:hover {
+  background: #388e3c;
+}
+
+.processing-status {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+}
+
+.result-box {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.result-box.success {
+  background: #e8f5e9;
+  color: #43a047;
+}
+
+.result-box.error {
+  background: #ffebee;
+  color: #e53935;
+}
