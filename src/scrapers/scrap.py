@@ -12,6 +12,7 @@ def get_current_date():
 def calculate_edition_number(reference_date_str="20-05-2025", reference_edition=44152, target_date_str=None):
     """
     Calcula el número de edición basado en una fecha de referencia.
+    Se salta los domingos.
     
     Args:
         reference_date_str: Fecha de referencia en formato DD-MM-YYYY
@@ -28,13 +29,17 @@ def calculate_edition_number(reference_date_str="20-05-2025", reference_edition=
     reference_date = datetime.strptime(reference_date_str, '%d-%m-%Y')
     target_date = datetime.strptime(target_date_str, '%d-%m-%Y')
     
-    # Calcular la diferencia en días
-    day_difference = (target_date - reference_date).days
+    # Inicializar el número de edición
+    edition_number = reference_edition
     
-    # Calcular el nuevo número de edición
-    new_edition = reference_edition + day_difference
+    # Iterar desde la fecha de referencia hasta la fecha objetivo
+    current_date = reference_date
+    while current_date < target_date:
+        current_date += timedelta(days=1)
+        if current_date.weekday() != 6:  # Saltar los domingos (6 = domingo)
+            edition_number += 1
     
-    return new_edition
+    return edition_number
 
 # Función para extraer los enlaces de los PDFs
 def get_pdf_links(url):
