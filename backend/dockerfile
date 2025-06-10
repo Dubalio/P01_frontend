@@ -6,17 +6,18 @@ RUN apt-get update && apt-get install -y python3 python3-pip python3-venv make g
 
 RUN python3 -m venv /venv
 
-
 COPY package*.json ./
-RUN npm install
+RUN npm install --only=production
 
 COPY processing/requirements.txt ./processing/requirements.txt
 RUN /venv/bin/pip install --upgrade pip && /venv/bin/pip install -r processing/requirements.txt
 
 COPY . .
 
+
+ENV NODE_ENV=production
 ENV PATH="/venv/bin:$PATH"
 
 EXPOSE 5000
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]
