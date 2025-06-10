@@ -42,7 +42,7 @@ def extract_company_info(text):
                 word_count = len(candidate.split())
                 
                 # Verificar si la razón social no es demasiado larga
-                if word_count <= 70:
+                if word_count <= 50:
                     company_name = candidate
                     break
                 else:

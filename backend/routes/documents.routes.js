@@ -16,7 +16,7 @@ router.post('/process', authenticateToken, (req, res) => {
   console.log(`Iniciando procesamiento para fecha: ${today}`);
   
 
-  const pythonScript = path.join(rootDir, 'src', 'main.py');
+  const pythonScript = path.join(__dirname, '..', 'processing', 'main.py');
   
 
   const pythonProcess = spawn('python', [pythonScript, today]);

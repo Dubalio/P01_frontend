@@ -49,7 +49,7 @@ def main():
         descargar_pdfs_desde_json(ruta_json, carpeta_destino)
 
     print("[PROCESO] Iniciando procesamiento de PDFs...")
-    data_folder = os.path.abspath(os.path.join(script_dir, "..", "data")) 
+    data_folder = os.path.abspath(os.path.join(script_dir, "../processed_data")) 
     
 
     result = extract_from_all_pdfs_in_folder(data_folder, documents_collection)

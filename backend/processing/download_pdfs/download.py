@@ -10,10 +10,10 @@ def obtener_fechas():
 def preparar_rutas(script_dir, fecha_archivo, fecha_carpeta):
     base_dir = os.path.abspath(os.path.join(script_dir, ".."))
 
-    ruta_json = os.path.join(base_dir, "src", f"pdf_links_{fecha_archivo}.json")
+    ruta_json = os.path.join(base_dir, "processing", f"pdf_links_{fecha_archivo}.json")
     
 
-    carpeta_destino = os.path.join(base_dir, "data", fecha_carpeta)
+    carpeta_destino = os.path.join(base_dir, "processed_data", fecha_carpeta)
     os.makedirs(carpeta_destino, exist_ok=True)
     
     return ruta_json, carpeta_destino

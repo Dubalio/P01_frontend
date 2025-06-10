@@ -2,13 +2,28 @@ FROM node:18
 
 WORKDIR /app
 
+# Instala Python y herramientas necesarias
+RUN apt-get update && apt-get install -y python3 python3-pip python3-venv make g++ && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && apt-get install -y python3 make g++ && rm -rf /var/lib/apt/lists/*
+# Crea un entorno virtual para Python
+RUN python3 -m venv /venv
 
+# Copia y instala dependencias de Node.js
 COPY package*.json ./
 RUN npm install
 
+# Copia el archivo de dependencias de Python y las instala
+COPY processing/requirements.txt ./processing/requirements.txt
+RUN /venv/bin/pip install --upgrade pip && /venv/bin/pip install -r processing/requirements.txt
+
+# Copia el resto del código al contenedor
 COPY . .
 
+# Configura el entorno virtual de Python
+ENV PATH="/venv/bin:$PATH"
+
+# Expone el puerto 5000
 EXPOSE 5000
+
+# Comando para iniciar el servidor
 CMD ["npm", "run", "dev"]
