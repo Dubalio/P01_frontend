@@ -1,0 +1,307 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark {
+  background-color: #1e1e1e;
+  color: #eee;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.busqueda-texto {
+  text-align: center;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+.search-bar {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.search-bar select,
+.search-bar input {
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.input-con-lupa {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-con-lupa input {
+  padding-left: 2rem;
+}
+
+.icono-lupa {
+  position: absolute;
+  left: 8px;
+  font-size: 1rem;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.search-bar button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.result-card {
+  background-color: #fff;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+body.dark .result-card {
+  background-color: #2a2a2a;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.05);
+}
+
+.modo-toggle {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1.5rem;
+  user-select: none;
+  position: relative;
+}
+
+.switch {
+  width: 40px;
+  height: 20px;
+  background-color: #ccc;
+  border-radius: 999px;
+  margin-left: 8px;
+  position: relative;
+  transition: background-color 0.3s;
+}
+
+.switch::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+.switch.active {
+  background-color: #333;
+}
+
+.switch.active::before {
+  transform: translateX(20px);
+}
+
+.contador-resultados {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.acciones-contenedor {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.acceder-boton,
+.exportar-select {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.acceder-boton {
+  background-color: #000;
+  color: white;
+}
+
+.acceder-boton:hover {
+  background-color: #222;
+}
+
+.exportar-select {
+  background-color: #444;
+  color: white;
+}
+
+.exportar-select:hover {
+  background-color: #666;
+}
+
+.reload-container {
+  margin: 10px 0;
+  text-align: right;
+}
+
+.reload-button {
+  background-color: #4C9FC5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.reload-button:hover {
+  background-color: #3d8eaf;
+}
+
+.reload-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+/* Nuevos estilos para el grafo D3 */
+.interactive-graph-container {
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+body.dark .interactive-graph-container {
+  background-color: #2a2a2a;
+}
+
+.svg-container {
+  width: 100%;
+  height: 600px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-top: 10px;
+  background: white;
+}
+
+body.dark .svg-container {
+  border-color: #444;
+  background: #1a1a1a;
+}
+
+.d3-graph {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.graph-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.graph-header h2 {
+  margin: 0;
+  color: #333;
+}
+
+body.dark .graph-header h2 {
+  color: #eee;
+}
+
+.graph-header div {
+  display: flex;
+  gap: 10px;
+}
+
+.back-button, .heat-up {
+  padding: 8px 16px;
+  background-color: #4C9FC5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.heat-up {
+  background-color: #FF7043;
+}
+
+.back-button:hover {
+  background-color: #3d8eaf;
+}
+
+.heat-up:hover {
+  background-color: #e8603a;
+}
+
+.graph-instructions {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+  font-style: italic;
+}
+
+body.dark .graph-instructions {
+  color: #aaa;
+}
+
+.node-details {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 10px 15px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  max-width: 300px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+body.dark .node-details {
+  background-color: #333;
+  border-color: #444;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.node-details h4 {
+  margin: 0 0 8px 0;
+  color: #333;
+}
+
+body.dark .node-details h4 {
+  color: #eee;
+}
