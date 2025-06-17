@@ -90,7 +90,9 @@ Otras pruebas con respecto al frontend
 -Fechas actuales correctamente
 -Modo oscuro operable 
 -Filtros aplicados correctamente
--Grafo operativo
+-Grafo operativo (falta boton de regreso)
+-Descargas operativas con sus respectivos resultados correctamente 
+-Procesamiento correcto (visualizable)
 
 
 
