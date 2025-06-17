@@ -86,8 +86,12 @@ Otras pruebas con respecto al frontend
 -Visualizar contraseña (agregar)
 -Ignora mayusculas y minisculas por defecto
 -Produce error al ingresar caracteres atipicos ej: , #/)%
--historial de busquedas recientes
--
+-Historial de busquedas recientes
+-Fechas actuales correctamente
+-Modo oscuro operable 
+-Filtros aplicados correctamente
+-Grafo operativo
+
 
 
 
