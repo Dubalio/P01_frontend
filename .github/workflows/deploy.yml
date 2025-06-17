@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the code
+
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Log in to Azure Container Registry (ACR)
+
       - name: Log in to ACR
         uses: azure/docker-login@v1
         with:
@@ -22,18 +22,18 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
-      # Set environment variables using GITHUB_ENV
+
       - name: Set environment variables
         run: |
           echo "VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}" >> $GITHUB_ENV
           echo "VITE_DOCS_API_URL=${{ secrets.VITE_DOCS_API_URL }}" >> $GITHUB_ENV
 
-      # Build Docker image
+
       - name: Build Docker image
         run: |
           docker build --build-arg VITE_API_BASE_URL=$VITE_API_BASE_URL --build-arg VITE_DOCS_API_URL=$VITE_DOCS_API_URL -t ${{ secrets.ACR_LOGIN_SERVER }}/frontend-image:latest .
 
-      # Push Docker image to ACR
+      
       - name: Push Docker image
         run: |
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/frontend-image:latest
