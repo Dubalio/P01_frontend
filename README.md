@@ -60,3 +60,22 @@ si utilizan nuevas librerias metanlas al arhivo de requiremnts.txt con el comand
 ```sh
 pip freeze > requirements.txt
 ```
+
+
+
+#Smoke Tests – P01 
+
+Este archivo documenta el propósito, configuración y ejecución de los **Smoke Tests** para el backend del proyecto **P01**. Los smoke tests permiten verificar que la API se esté ejecutando correctamente y que los endpoints principales respondan correctamente.
+
+
+##Objetivos probados 
+
+Asegurar que el servidor:
+
+- Se levanta sin errores.
+- Responde correctamente a rutas clave (por ejemplo, `/empresas`).
+- Retorna un código **HTTP 200 OK** en sus operaciones básicas.
+
+
+
+
