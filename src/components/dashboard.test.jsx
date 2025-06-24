@@ -15,3 +15,8 @@ test('muestra el botón Cerrar Sesión', () => {
   expect(screen.getByRole('button', { name: /cerrar sesión/i })).toBeInTheDocument();
 });
 
+test('muestra el botón Recargar datos', () => {
+  const user = { role: 'estudiante', email: 'alumno@correo.com' };
+  render(<Dashboard user={user} setUser={() => {}} />);
+  expect(screen.getByRole('button', { name: /recargar datos/i })).toBeInTheDocument();
+});
